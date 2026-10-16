@@ -1,0 +1,32 @@
+body {
+    width: 960px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+#izquierda {
+    width: 260px;
+    float: left;
+}
+
+#centro {
+    width: 700px;
+    float: left;
+}
+
+#izquierda img {
+    width: 260px;
+}
+
+#comentarios h2 {
+    text-align: center;
+}
+
+.comentario {
+    width: 32%;
+    float: left;
+    text-align: justify;
+}

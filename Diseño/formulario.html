@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Formularios</title>
+    </head>
+
+    <body>
+        <h1>Formularios</h1>
+        <h2>Identificacion</h2>
+        <form action="https://jkorpela.fi/cgi-bin/echo.cgi" target="_blank"
+            method="get">
+            <p>
+                <label for="nombre">Nombre: </label><br>
+                <input type="text" id="nombre" name="nombre" required><br>
+                <label for="apellido">Apellidos: </label><br>
+                <input type="text" id="apellidos" name="apellidos" required><br>
+                <label for="email">Correo electronico: </label><br>
+                <input type="email" id="email" name="email" placeholder="ejemplo@gmail.com" required pattern="+@+"><br>
+                <label for="telefono">Telefono: </label><br>
+                <input type="tel" pattern="[0-9]{9}" maxlength="9" mid="telefono" name="telefono" placeholder="123456789" required><br>
+                <label for="dni">DNI: </label><br>
+                <input type="text" id="dni" name="dni" pattern="[0-9]{8}[A-Z]{1}" required><br>
+
+            </p>
+            <h2>Equipo</h2>
+            <p>
+
+                <input type="radio" id="gay" name="equipo1" value="gay">
+                <label for="gay">beti</label><br>
+                <input type="radio" id="homosexual" name="equipo2"
+                    value="homosexual">
+                <label for="homosexual">sevilla</label><br>
+                <input type="radio" id="me gustan los hombres" name="equipo3"
+                    value="me gustan los hombres">
+                <label for="me gustan los hombres">recre</label>
+
+            </p>
+            <h2>IA favorita</h2>
+            <p>
+
+                <input type="checkbox" id="chatgpt" name="ia1" value="chatgpt">
+                <label for="chatgpt">chagpt</label><br>
+                <input type="checkbox" id="gemini" name="ia2" value="gemini">
+                <label for="gemini">gemini</label><br>
+                <input type="checkbox" id="claude" name="ia3" value="claude">
+                <label for="claude">claude</label><br>
+
+            </p>
+            <p>
+
+            </p>
+            <p>
+                <input type="submit" value="Enviar">
+                <input type="reset" value="Borrar">
+            </p>
+        </form>
+    </body>
+
+</html>

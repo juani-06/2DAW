@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CONTROL // ACADEMIC OS</title>
+    <style>
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: #070708;
+            color: #e8e8eb;
+            font: 14px Segoe UI, Arial, sans-serif
+        }
+
+        body:before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(90deg, #fff1 1px, transparent 1px), linear-gradient(#fff1 1px, transparent 1px);
+            background-size: 55px 55px;
+            mask-image: linear-gradient(#000, transparent 70%)
+        }
+
+        .wrap {
+            width: min(1450px, 94%);
+            margin: auto
+        }
+
+        .panel,
+        .card {
+            background: linear-gradient(145deg, #17171b, #0b0b0d);
+            border: 1px solid #29292f;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px #0008
+        }
+
+        .panel {
+            padding: 18px;
+            margin: 15px 0
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            padding: 28px 0 18px;
+            border-bottom: 1px solid #29292f
+        }
+
+        .k {
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: #c7a45b
+        }
+
+        .top h1 {
+            font-size: clamp(35px, 5vw, 65px);
+            margin: 8px 0 0;
+            letter-spacing: -4px
+        }
+
+        .clock {
+            text-align: right
+        }
+
+        .clock b {
+            font-size: 25px
+        }
+
+        .clock small {
+            display: block;
+            color: #777
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 15px 0
+        }
+
+        .card {
+            padding: 16px
+        }
+
+        .label {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: #777
+        }
+
+        .val {
+            font-weight: 700;
+            margin-top: 8px
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 15px
+        }
+
+        .title {
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: #c7a45b;
+            margin-bottom: 13px
+        }
+
+        .table {
+            overflow: auto
+        }
+
+        .schedule {
+            border-spacing: 5px;
+            border-collapse: separate;
+            width: 100%;
+            min-width: 820px
+        }
+
+        .schedule th {
+            font-size: 10px;
+            color: #777
+        }
+
+        .schedule td {
+            height: 66px;
+            border: 1px solid #29292f;
+            border-radius: 9px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 7px
+        }
+
+        .hour {
+            color: #888 !important;
+            background: #0b0b0d
+        }
+
+        .recreo {
+            background: #16161a;
+            color: #777;
+            font-size: 9px !important;
+            letter-spacing: 2px
+        }
+
+        .ingles {
+            background: #263b5c
+        }
+
+        .cliente {
+            background: #5b292f
+        }
+
+        .interfaces {
+            background: #463160
+        }
+
+        .optativa {
+            background: #665329
+        }
+
+        .servidor {
+            background: #294e3e
+        }
+
+        .ipe {
+            background: #633b29
+        }
+
+        .despliegue {
+            background: #295560
+        }
+
+        .proyecto {
+            background: #5a3044
+        }
+
+        .progress {
+            height: 5px;
+            background: #222;
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 12px
+        }
+
+        .progress i {
+            display: block;
+            height: 100%;
+            background: #c7a45b;
+            width: 0
+        }
+
+        .calc {
+            width: 100%;
+            height: 62px;
+            background: #08080a;
+            border: 1px solid #29292f;
+            border-radius: 9px;
+            color: #eee;
+            text-align: right;
+            font-size: 27px;
+            padding: 10px
+        }
+
+        .calcgrid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 7px;
+            margin-top: 8px
+        }
+
+        .btn,
+        .calcgrid button {
+            height: 40px;
+            border: 1px solid #303036;
+            border-radius: 8px;
+            background: #151519;
+            color: #ddd;
+            cursor: pointer
+        }
+
+        .btn {
+            padding: 0 13px
+        }
+
+        .btn:hover,
+        .calcgrid button:hover {
+            background: #25252a
+        }
+
+        .zero {
+            grid-column: span 2
+        }
+
+        .notes {
+            width: 100%;
+            min-height: 125px;
+            background: #0b0b0d;
+            color: #ddd;
+            border: 1px solid #29292f;
+            border-radius: 9px;
+            padding: 10px;
+            resize: vertical
+        }
+
+        .mini {
+            color: #777;
+            font-size: 11px;
+            line-height: 1.6
+        }
+
+        .row {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap
+        }
+
+        footer {
+            text-align: center;
+            color: #555;
+            font-size: 9px;
+            letter-spacing: 2px;
+            padding: 20px 0 35px
+        }
+
+        #menu,
+        #screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: #020203eF;
+            backdrop-filter: blur(18px);
+            overflow: auto
+        }
+
+        #menu.on,
+        #screen.on {
+            display: block
+        }
+
+        .box {
+            width: min(1200px, 94%);
+            margin: 5vh auto;
+            padding: 25px;
+            background: linear-gradient(145deg, #151519, #08080a);
+            border: 1px solid #51452d;
+            border-radius: 18px;
+            box-shadow: 0 30px 100px #000
+        }
+
+        .arcadeHead {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 20px
+        }
+
+        .arcadeHead h2 {
+            font-size: 42px;
+            margin: 6px 0;
+            letter-spacing: -2px
+        }
+
+        .gold {
+            color: #c7a45b;
+            font-size: 9px;
+            letter-spacing: 3px
+        }
+
+        .games {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px
+        }
+
+        .game {
+            min-height: 130px;
+            padding: 17px;
+            text-align: center;
+            background: #101014;
+            border: 1px solid #29292f;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .game:hover {
+            transform: translateY(-4px);
+            border-color: #666
+        }
+
+        .game strong {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            margin: auto;
+            border: 1px solid #444;
+            border-radius: 9px;
+            font-size: 10px
+        }
+
+        .game h3 {
+            font-size: 12px;
+            margin: 10px 0 5px
+        }
+
+        .game p {
+            font-size: 10px;
+            color: #666
+        }
+
+        .wide {
+            width: 100%;
+            height: 42px;
+            margin-top: 16px
+        }
+
+        .canvas {
+            display: block;
+            width: min(700px, 100%);
+            height: auto;
+            margin: 15px auto;
+            background: #030304;
+            border: 1px solid #29292f;
+            border-radius: 9px
+        }
+
+        .gamecontent {
+            text-align: center
+        }
+
+        .info {
+            color: #777;
+            font-size: 11px
+        }
+
+        .ttt,
+        .memory,
+        .mines {
+            display: grid;
+            margin: 18px auto;
+            gap: 6px
+        }
+
+        .ttt {
+            width: 300px;
+            grid-template-columns: repeat(3, 1fr)
+        }
+
+        .ttt button {
+            aspect-ratio: 1;
+            background: #111114;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #eee;
+            font-size: 38px
+        }
+
+        .memory {
+            width: 420px;
+            max-width: 100%;
+            grid-template-columns: repeat(4, 1fr)
+        }
+
+        .memory button {
+            aspect-ratio: 1;
+            background: #111114;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #eee;
+            font-size: 24px
+        }
+
+        .mines {
+            width: 360px;
+            max-width: 100%;
+            grid-template-columns: repeat(8, 1fr);
+            background: #111;
+            padding: 3px
+        }
+
+        .mines button {
+            aspect-ratio: 1;
+            background: #18181c;
+            border: 1px solid #303036;
+            color: #ddd;
+            font-size: 11px
+        }
+
+        .clicknum {
+            font-size: 70px;
+            font-weight: 900;
+            margin: 20px
+        }
+
+        .clickbig {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: #111114;
+            border: 1px solid #444;
+            color: #eee
+        }
+
+        .react {
+            height: 240px;
+            width: min(600px, 100%);
+            margin: 15px auto;
+            border: 1px solid #333;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: #151519;
+            cursor: pointer
+        }
+
+        .react.go {
+            background: #253a2d
+        }
+
+        .tetris {
+            display: grid;
+            grid-template-columns: repeat(10, 25px);
+            grid-auto-rows: 25px;
+            gap: 1px;
+            width: max-content;
+            margin: 15px auto;
+            background: #111;
+            padding: 4px
+        }
+
+        .tetris div {
+            background: #09090b;
+            border: 1px solid #18181b
+        }
+
+        .tetris .f {
+            background: #777
+        }
+
+        @media(max-width:1050px) {
+            .layout {
+                grid-template-columns: 1fr
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .games {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        @media(max-width:650px) {
+            .games {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .clock {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header class="top">
+            <div>
+                <div class="k">CONTROL // ACADEMIC OS</div>
+                <h1>HORARIO</h1>
+            </div>
+            <div class="clock"><b id="clock">00:00:00</b><small id="date">--</small></div>
+        </header>
+        <section class="stats">
+            <div class="card">
+                <div class="label">DÍA</div>
+                <div class="val" id="day">--</div>
+            </div>
+            <div class="card">
+                <div class="label">ESTADO</div>
+                <div class="val" id="state">--</div>
+            </div>
+            <div class="card">
+                <div class="label">CLASE ACTUAL</div>
+                <div class="val" id="cur">--</div>
+            </div>
+            <div class="card">
+                <div class="label">SIGUIENTE</div>
+                <div class="val" id="next">--</div>
+            </div>
+        </section>
+        <div class="layout">
+            <main>
+                <div class="panel">
+                    <div class="title">HORARIO SEMANAL</div>
+                    <div class="table">
+                        <table class="schedule">
+                            <thead>
+                                <tr>
+                                    <th>HORA</th>
+                                    <th>LUNES</th>
+                                    <th>MARTES</th>
+                                    <th>MIÉRCOLES</th>
+                                    <th>JUEVES</th>
+                                    <th>VIERNES</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="hour">08:15<br>09:15</td>
+                                    <td class="servidor">Desarrollo web<br>en entorno servidor</td>
+                                    <td class="cliente">Desarrollo web<br>en entorno cliente</td>
+                                    <td class="interfaces" rowspan="2">Diseño de<br>interfaces Web</td>
+                                    <td class="ingles">Inglés<br>Profesional GS</td>
+                                    <td class="optativa">Optativa</td>
+                                </tr>
+                                <tr>
+                                    <td class="hour">09:15<br>10:15</td>
+                                    <td class="servidor">Desarrollo web<br>en entorno servidor</td>
+                                    <td class="cliente">Desarrollo web<br>en entorno cliente</td>
+                                    <td class="ingles">Inglés<br>Profesional GS</td>
+                                    <td class="optativa">Optativa</td>
+                                </tr>
+                                <tr>
+                                    <td class="hour">10:15<br>11:15</td>
+                                    <td class="ipe">Itinerario Personal<br>para el Empleo</td>
+                                    <td class="despliegue">Despliegue de<br>aplicaciones web</td>
+                                    <td class="cliente">Desarrollo web<br>en entorno cliente</td>
+                                    <td class="servidor">Desarrollo web<br>en entorno servidor</td>
+                                    <td class="proyecto">Proyecto Intermodular<br>de Desarrollo</td>
+                                </tr>
+                                <tr>
+                                    <td class="hour">11:15<br>11:45</td>
+                                    <td class="recreo" colspan="5">RECREO</td>
+                                </tr>
+                                <tr>
+                                    <td class="hour">11:45<br>12:45</td>
+                                    <td class="servidor" rowspan="3">Desarrollo web<br>en entorno servidor</td>
+                                    <td class="ipe">Itinerario Personal<br>para el Empleo</td>
+                                    <td class="interfaces">Diseño de<br>interfaces Web</td>
+                                    <td class="despliegue">Despliegue de<br>aplicaciones web</td>
+                                    <td class="proyecto" rowspan="2">Proyecto Intermodular<br>de Desarrollo</td>
+                                </tr>
+                                <tr>
+                                    <td class="hour">12:45<br>13:45</td>
+                                    <td class="despliegue" rowspan="2">Despliegue de<br>aplicaciones web</td>
+                                    <td class="cliente" rowspan="2">Desarrollo web<br>en entorno cliente</td>
+                                    <td class="cliente" rowspan="2">Desarrollo web<br>en entorno cliente</td>
+                                </tr>
+                                <tr>
+                                    <td class="hour">13:45<br>14:45</td>
+                                    <td class="ingles">Inglés<br>Profesional GS</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="progress"><i id="prog"></i></div>
+                </div>
+                <div class="panel">
+                    <div class="title">MONITOR</div>
+                    <div class="mini" id="monitor">--</div>
+                </div>
+            </main>
+            <aside>
+                <div class="panel">
+                    <div class="title">CALCULADORA</div><input id="display" class="calc" value="0" readonly>
+                    <div class="calcgrid">
+                        <button onclick="ci('7')">7</button><button onclick="ci('8')">8</button><button
+                            onclick="ci('9')">9</button><button onclick="ci('/')">÷</button>
+                        <button onclick="ci('4')">4</button><button onclick="ci('5')">5</button><button
+                            onclick="ci('6')">6</button><button onclick="ci('*')">×</button>
+                        <button onclick="ci('1')">1</button><button onclick="ci('2')">2</button><button
+                            onclick="ci('3')">3</button><button onclick="ci('-')">−</button>
+                        <button class="zero" onclick="ci('0')">0</button><button onclick="ci('.')">.</button><button
+                            onclick="ci('+')">+</button>
+                        <button onclick="clearCalc()">AC</button><button onclick="delCalc()">DEL</button><button
+                            onclick="ci('%')">%</button><button onclick="calc()">=</button>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="title">POMODORO</div>
+                    <div class="val" id="pomo">25:00</div>
+                    <div class="row" style="margin-top:10px"><button class="btn"
+                            onclick="pomoStart()">START</button><button class="btn" onclick="pomoReset()">RESET</button>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="title">NOTAS LOCALES</div><textarea id="notes" class="notes"
+                        placeholder="Escribe algo..."></textarea>
+                    <div class="row" style="margin-top:8px"><button class="btn"
+                            onclick="saveNotes()">GUARDAR</button><button class="btn"
+                            onclick="clearNotes()">BORRAR</button></div>
+                </div>
+                <div class="panel">
+                    <div class="title">UTILIDADES</div>
+                    <div class="row"><button class="btn" onclick="die()">DADO</button><button class="btn"
+                            onclick="coin()">MONEDA</button><button class="btn" onclick="subject()">ASIGNATURA</button>
+                    </div>
+                    <div class="mini" id="out" style="margin-top:10px">Esperando...</div>
+                </div>
+            </aside>
+        </div>
+        <footer>ACADEMIC OS // LOCAL SYSTEM</footer>
+    </div>
+
+    <div id="menu">
+        <div class="box">
+            <div class="arcadeHead">
+                <div>
+                    <div class="gold">SYSTEM // HIDDEN MODULE</div>
+                    <h2>ARCADE</h2>
+                </div>
+                <div class="gold">ACCESS GRANTED</div>
+            </div>
+            <div class="games">
+                <div class="game" onclick="snake()"><strong>S</strong>
+                    <h3>SNAKE</h3>
+                    <p>Come y crece.</p>
+                </div>
+                <div class="game" onclick="pong()"><strong>P</strong>
+                    <h3>PONG</h3>
+                    <p>Contra la máquina.</p>
+                </div>
+                <div class="game" onclick="g2048()"><strong>2048</strong>
+                    <h3>2048</h3>
+                    <p>Combina números.</p>
+                </div>
+                <div class="game" onclick="guess()"><strong>?</strong>
+                    <h3>GUESS</h3>
+                    <p>Adivina.</p>
+                </div>
+                <div class="game" onclick="ttt()"><strong>XO</strong>
+                    <h3>TIC TAC TOE</h3>
+                    <p>Tres en raya.</p>
+                </div>
+                <div class="game" onclick="breakout()"><strong>BR</strong>
+                    <h3>BREAKOUT</h3>
+                    <p>Rompe bloques.</p>
+                </div>
+                <div class="game" onclick="memory()"><strong>M</strong>
+                    <h3>MEMORY</h3>
+                    <p>Parejas.</p>
+                </div>
+                <div class="game" onclick="minesweeper()"><strong>MS</strong>
+                    <h3>MINESWEEPER</h3>
+                    <p>Evita minas.</p>
+                </div>
+                <div class="game" onclick="tetris()"><strong>T</strong>
+                    <h3>TETRIS</h3>
+                    <p>Encaja piezas.</p>
+                </div>
+                <div class="game" onclick="reaction()"><strong>RT</strong>
+                    <h3>REACTION</h3>
+                    <p>Reflejos.</p>
+                </div>
+                <div class="game" onclick="clicker()"><strong>CP</strong>
+                    <h3>CLICK SPEED</h3>
+                    <p>Diez segundos.</p>
+                </div>
+                <div class="game" onclick="numbers()"><strong>NC</strong>
+                    <h3>NUMBER</h3>
+                    <p>Resuelve.</p>
+                </div>
+            </div><button class="btn wide" onclick="closeAll()">CERRAR ARCADE</button>
+        </div>
+    </div>
+
+    <div id="screen">
+        <div class="box">
+            <div class="arcadeHead">
+                <div>
+                    <div class="gold">ARCADE // RUNNING</div>
+                    <h2 id="gameTitle">GAME</h2>
+                </div>
+                <div class="gold" id="score">SCORE: 0</div>
+            </div>
+            <div id="content" class="gamecontent"></div><button class="btn wide" onclick="back()">VOLVER AL
+                ARCADE</button>
+        </div>
+    </div>
+
+    <script>
+        /* CLOCK + TIMETABLE */
+        const sch = {1: [['08:15', '10:15', 'Desarrollo web en entorno servidor'], ['10:15', '11:15', 'Itinerario Personal para el Empleo'], ['11:45', '14:45', 'Desarrollo web en entorno servidor']], 2: [['08:15', '10:15', 'Desarrollo web en entorno cliente'], ['10:15', '11:15', 'Despliegue de aplicaciones web'], ['11:45', '12:45', 'Itinerario Personal para el Empleo'], ['12:45', '14:45', 'Despliegue de aplicaciones web']], 3: [['08:15', '10:15', 'Diseño de interfaces Web'], ['10:15', '11:15', 'Desarrollo web en entorno cliente'], ['11:45', '12:45', 'Diseño de interfaces Web'], ['12:45', '14:45', 'Desarrollo web en entorno cliente']], 4: [['08:15', '10:15', 'Inglés Profesional GS'], ['10:15', '11:15', 'Desarrollo web en entorno servidor'], ['11:45', '12:45', 'Despliegue de aplicaciones web'], ['12:45', '14:45', 'Desarrollo web en entorno cliente']], 5: [['08:15', '10:15', 'Optativa'], ['10:15', '11:15', 'Proyecto Intermodular de Desarrollo'], ['11:45', '13:45', 'Proyecto Intermodular de Desarrollo'], ['13:45', '14:45', 'Inglés Profesional GS']]};
+        const mins = s => {let [h, m] = s.split(':').map(Number); return h * 60 + m};
+        function clock() {let d = new Date(), n = d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60, a = sch[d.getDay()] || [], cur = null, next = null; a.forEach(x => {if (n >= mins(x[0]) && n < mins(x[1])) cur = x; if (n < mins(x[0]) && !next) next = x}); document.getElementById('clock').textContent = d.toLocaleTimeString('es-ES', {hour12: false}); document.getElementById('date').textContent = d.toLocaleDateString('es-ES', {weekday: 'long', day: '2-digit', month: 'long'}); document.getElementById('day').textContent = d.toLocaleDateString('es-ES', {weekday: 'long'}); document.getElementById('state').textContent = cur ? 'EN CLASE' : next ? 'PRÓXIMA CLASE' : 'LIBRE'; document.getElementById('cur').textContent = cur ? cur[2] : 'Sin clase'; document.getElementById('next').textContent = next ? next[2] : 'Fin de jornada'; document.getElementById('monitor').textContent = cur ? `Clase en curso: ${cur[2]} · ${cur[0]}–${cur[1]}` : next ? `Siguiente: ${next[2]} · ${next[0]}–${next[1]}` : 'No hay clases ahora.'; document.getElementById('prog').style.width = (cur ? Math.max(0, Math.min(100, (n - mins(cur[0])) / (mins(cur[1]) - mins(cur[0])) * 100)) : 0) + '%'} setInterval(clock, 1000); clock();
+
+        /* CALCULATOR: LOOKS NORMAL; 6767*2 IS THE INVISIBLE EASTER EGG */
+        let expr = '';
+        function show() {document.getElementById('display').value = expr || '0'}
+        function ci(v) {let last = expr.slice(-1), ops = ['+', '-', '*', '/']; if (ops.includes(v) && ops.includes(last)) expr = expr.slice(0, -1); if (v === '.' && expr.split(/[+\-*\/]/).pop().includes('.')) return; expr += v; show()}
+        function clearCalc() {expr = ''; show()} function delCalc() {expr = expr.slice(0, -1); show()}
+        function calc() {if (!expr) return; let n = expr.replace(/×/g, '*').replace(/÷/g, '/'); if (n === '6767*2') {expr = '13534'; show(); setTimeout(() => document.getElementById('menu').classList.add('on'), 250); return } try {if (!/^[0-9+\-*/%.() ]+$/.test(n)) throw 0; let r = Function('"use strict";return(' + n + ')')(); if (!Number.isFinite(r)) throw 0; expr = String(r); show()} catch {expr = ''; show()} }
+        document.addEventListener('keydown', e => {if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return; if (/[0-9]/.test(e.key) || ['+', '-', '*', '/', '%', '.'].includes(e.key)) ci(e.key); if (e.key === 'Enter') calc(); if (e.key === 'Backspace') delCalc(); if (e.key === 'Escape') closeAll()});
+
+        /* BASIC TOOLS */
+        let pt = 1500, ptm = null; function renderP() {document.getElementById('pomo').textContent = String(Math.floor(pt / 60)).padStart(2, '0') + ':' + String(pt % 60).padStart(2, '0')} function pomoStart() {if (ptm) return; ptm = setInterval(() => {if (pt) {pt--; renderP()} else {clearInterval(ptm); ptm = null; alert('Pomodoro terminado.')} }, 1000)} function pomoReset() {clearInterval(ptm); ptm = null; pt = 1500; renderP()}
+        document.getElementById('notes').value = localStorage.getItem('notes') || ''; function saveNotes() {localStorage.setItem('notes', document.getElementById('notes').value)} function clearNotes() {document.getElementById('notes').value = ''; localStorage.removeItem('notes')}
+        const subs = ['Inglés Profesional GS', 'Desarrollo web en entorno cliente', 'Diseño de interfaces Web', 'Optativa', 'Desarrollo web en entorno servidor', 'Itinerario Personal para el Empleo', 'Despliegue de aplicaciones web', 'Proyecto Intermodular de Desarrollo']; function die() {out.textContent = 'Resultado: ' + (1 + Math.floor(Math.random() * 6))} function coin() {out.textContent = Math.random() < .5 ? 'CARA' : 'CRUZ'} function subject() {out.textContent = subs[Math.floor(Math.random() * subs.length)]}
+
+        /* ARCADE ENGINE */
+        let game = null, anim = null, int = null; function openGame(t) {stop(); menu.classList.remove('on'); screen.classList.add('on'); gameTitle.textContent = t; score.textContent = 'SCORE: 0'} function stop() {game = null; if (anim) cancelAnimationFrame(anim); if (int) clearInterval(int); anim = null; int = null; document.onkeydown = null} function back() {stop(); screen.classList.remove('on'); menu.classList.add('on')} function closeAll() {stop(); menu.classList.remove('on'); screen.classList.remove('on')}
+
+        /* SNAKE */
+        function snake() {openGame('SNAKE'); game = 'snake'; content.innerHTML = '<canvas id="cv" class="canvas" width="500" height="500"></canvas><p class="info">Flechas o WASD.</p>'; let c = cv.getContext('2d'), s = 25, body = [{x: 10, y: 10}], d = {x: 1, y: 0}, nd = {x: 1, y: 0}, food = {x: 5, y: 5}, sc = 0; function spawn() {do {food = {x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20)}} while (body.some(q => q.x === food.x && q.y === food.y))} document.onkeydown = e => {let k = e.key.toLowerCase(); if ((k === 'arrowup' || k === 'w') && d.y !== 1) nd = {x: 0, y: -1}; if ((k === 'arrowdown' || k === 's') && d.y !== -1) nd = {x: 0, y: 1}; if ((k === 'arrowleft' || k === 'a') && d.x !== 1) nd = {x: -1, y: 0}; if ((k === 'arrowright' || k === 'd') && d.x !== -1) nd = {x: 1, y: 0}}; int = setInterval(() => {d = nd; let h = {x: body[0].x + d.x, y: body[0].y + d.y}; if (h.x < 0 || h.x >= 20 || h.y < 0 || h.y >= 20 || body.some(q => q.x === h.x && q.y === h.y)) {alert('SNAKE TERMINADO · ' + sc); stop(); return } body.unshift(h); if (h.x === food.x && h.y === food.y) {sc++; score.textContent = 'SCORE: ' + sc; spawn()} else body.pop(); c.fillStyle = '#030304'; c.fillRect(0, 0, 500, 500); c.fillStyle = '#666'; c.fillRect(food.x * s, food.y * s, 23, 23); c.fillStyle = '#ddd'; body.forEach(q => c.fillRect(q.x * s, q.y * s, 23, 23))}, 100)}
+        /* PONG */
+        function pong() {openGame('PONG'); game = 'pong'; content.innerHTML = '<canvas id="cv" class="canvas" width="700" height="420"></canvas><p class="info">W/S o flechas.</p>'; let c = cv.getContext('2d'), py = 170, ay = 170, bx = 350, by = 210, vx = 5, vy = 3, sc = 0, k = {}; document.onkeydown = e => k[e.key] = 1; document.onkeyup = e => k[e.key] = 0; function f() {if (game !== 'pong') return; if (k.w || k.ArrowUp) py -= 6; if (k.s || k.ArrowDown) py += 6; py = Math.max(0, Math.min(340, py)); ay += (by - (ay + 40)) * .08; bx += vx; by += vy; if (by < 5 || by > 415) vy *= -1; if (bx < 35 && by > py && by < py + 80) {vx = Math.abs(vx); vy += (by - py - 40) * .04} if (bx > 665 && by > ay && by < ay + 80) {vx = -Math.abs(vx); sc++; score.textContent = 'SCORE: ' + sc} if (bx < 0 || bx > 700) {bx = 350; by = 210; vx = bx < 0 ? 5 : -5} c.fillStyle = '#030304'; c.fillRect(0, 0, 700, 420); c.fillStyle = '#777'; c.fillRect(20, py, 12, 80); c.fillRect(668, ay, 12, 80); c.fillStyle = '#ddd'; c.fillRect(bx - 6, by - 6, 12, 12); anim = requestAnimationFrame(f)} f()}
+        /* 2048 */
+        function g2048() {openGame('2048'); game = '2048'; let b = Array(16).fill(0), sc = 0; content.innerHTML = '<div id="b2048" style="width:360px;max-width:100%;margin:20px auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px"></div><p class="info">Flechas para mover.</p>'; function add() {let f = b.map((v, i) => v ? null : i).filter(v => v != null); if (f.length) b[f[Math.floor(Math.random() * f.length)]] = Math.random() < .9 ? 2 : 4} function draw() {b2048.innerHTML = ''; b.forEach(v => {let d = document.createElement('div'); d.style.cssText = 'aspect-ratio:1;display:grid;place-items:center;background:' + (v ? '#29292e' : '#121215') + ';border:1px solid #333;border-radius:8px;font-size:22px'; d.textContent = v || ''; b2048.appendChild(d)}); score.textContent = 'SCORE: ' + sc} function move(dir) {let old = b.join(), map = {left: [0, 1, 2, 3], right: [3, 2, 1, 0], up: [0, 1, 2, 3], down: [3, 2, 1, 0]}; for (let l = 0; l < 4; l++) {let ids = dir === 'left' || dir === 'right' ? [0, 1, 2, 3].map(i => l * 4 + i) : [0, 1, 2, 3].map(i => i * 4 + l); if (dir === 'right' || dir === 'down') ids.reverse(); let v = ids.map(i => b[i]).filter(Boolean); for (let i = 0; i < v.length - 1; i++)if (v[i] === v[i + 1]) {v[i] *= 2; sc += v[i]; v.splice(i + 1, 1)} while (v.length < 4) v.push(0); ids.forEach((id, i) => b[id] = v[i])} if (old !== b.join()) {add(); draw()} } document.onkeydown = e => {let m = {ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down'}; if (m[e.key]) move(m[e.key])}; add(); add(); draw()}
+        /* GUESS */
+        function guess() {openGame('GUESS'); game = 'guess'; let n = 1 + Math.floor(Math.random() * 100), tr = 0; content.innerHTML = '<p class="info">Número entre 1 y 100.</p><input id="gin" type="number"><button class="btn" onclick="tryGuess()">PROBAR</button><p id="gout" class="info"></p>'; window.tryGuess = () => {let v = +gin.value; tr++; gout.textContent = v === n ? 'Correcto · intentos: ' + tr : v < n ? 'Demasiado bajo.' : 'Demasiado alto.'}}
+        /* TTT */
+        let tb = []; function ttt() {openGame('TIC TAC TOE'); game = 'ttt'; tb = Array(9).fill(''); drawTtt()} function drawTtt() {content.innerHTML = '<div class="ttt" id="tttb"></div><p id="ti" class="info">Tu turno: X</p>'; tb.forEach((v, i) => {let b = document.createElement('button'); b.textContent = v; b.onclick = () => tm(i); tttb.appendChild(b)})} function won(p) {return [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]].some(a => a.every(i => tb[i] === p))} function tm(i) {if (tb[i] || game !== 'ttt') return; tb[i] = 'X'; if (won('X')) {drawTtt(); ti.textContent = 'Has ganado.'; return } let f = tb.map((v, i) => v ? null : i).filter(v => v != null); if (!f.length) {drawTtt(); ti.textContent = 'Empate.'; return } setTimeout(() => {let q = f[Math.floor(Math.random() * f.length)]; tb[q] = 'O'; drawTtt(); if (won('O')) ti.textContent = 'La máquina ha ganado.'}, 200)}
+        /* BREAKOUT */
+        function breakout() {openGame('BREAKOUT'); game = 'break'; content.innerHTML = '<canvas id="cv" class="canvas" width="700" height="450"></canvas><p class="info">Flechas izquierda/derecha.</p>'; let c = cv.getContext('2d'), px = 310, b = {x: 350, y: 400, vx: 4, vy: -4}, k = {}, br = [], sc = 0; for (let r = 0; r < 5; r++)for (let q = 0; q < 10; q++)br.push({x: 35 + q * 65, y: 40 + r * 28, w: 55, h: 18, a: 1}); document.onkeydown = e => k[e.key] = 1; document.onkeyup = e => k[e.key] = 0; function f() {if (game !== 'break') return; if (k.ArrowLeft) px -= 7; if (k.ArrowRight) px += 7; px = Math.max(0, Math.min(620, px)); b.x += b.vx; b.y += b.vy; if (b.x < 5 || b.x > 695) b.vx *= -1; if (b.y < 5) b.vy *= -1; if (b.y > 405 && b.x > px && b.x < px + 80) b.vy = -Math.abs(b.vy); br.forEach(q => {if (q.a && b.x > q.x && b.x < q.x + q.w && b.y > q.y && b.y < q.y + q.h) {q.a = 0; b.vy *= -1; sc += 10; score.textContent = 'SCORE: ' + sc} }); if (b.y > 450) {alert('GAME OVER · ' + sc); stop(); return } c.fillStyle = '#030304'; c.fillRect(0, 0, 700, 450); c.fillStyle = '#777'; br.forEach(q => q.a && c.fillRect(q.x, q.y, q.w, q.h)); c.fillStyle = '#ddd'; c.fillRect(px, 420, 80, 10); c.fillRect(b.x - 6, b.y - 6, 12, 12); anim = requestAnimationFrame(f)} f()}
+        /* MEMORY */
+        let mem = [], first = null, locked = 0; function memory() {openGame('MEMORY'); game = 'memory'; mem = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H'].sort(() => Math.random() - .5).map(s => ({s, r: 0, m: 0})); first = null; locked = 0; drawMem()} function drawMem() {content.innerHTML = '<div class="memory" id="mb"></div>'; mem.forEach((q, i) => {let b = document.createElement('button'); b.textContent = q.r || q.m ? q.s : ''; b.onclick = () => flip(i); mb.appendChild(b)})} function flip(i) {if (locked || mem[i].r || mem[i].m) return; mem[i].r = 1; drawMem(); if (first == null) {first = i; return } let j = i; if (mem[first].s === mem[j].s) {mem[first].m = mem[j].m = 1; first = null; drawMem()} else {locked = 1; setTimeout(() => {mem[first].r = mem[j].r = 0; first = null; locked = 0; drawMem()}, 600)} }
+        /* MINESWEEPER */
+        let mm = [], rv = []; function minesweeper() {openGame('MINESWEEPER'); game = 'mine'; mm = Array(64).fill(0); rv = Array(64).fill(0); let s = new Set; while (s.size < 10) s.add(Math.floor(Math.random() * 64)); s.forEach(i => mm[i] = -1); for (let i = 0; i < 64; i++)if (mm[i] >= 0) {let r = i / 8 | 0, c = i % 8, n = 0; for (let dr = -1; dr <= 1; dr++)for (let dc = -1; dc <= 1; dc++) {let R = r + dr, C = c + dc; if (R >= 0 && R < 8 && C >= 0 && C < 8 && mm[R * 8 + C] === -1) n++} mm[i] = n} drawMine()} function drawMine() {content.innerHTML = '<div class="mines" id="mines"></div>'; mm.forEach((v, i) => {let b = document.createElement('button'); b.textContent = rv[i] ? (v === -1 ? 'X' : v || '') : ''; b.onclick = () => mine(i); mines.appendChild(b)})} function mine(i) {if (rv[i]) return; rv[i] = 1; if (mm[i] === -1) {drawMine(); alert('MINA. FIN.'); stop(); return } drawMine()}
+        /* TETRIS MINI */
+        function tetris() {openGame('TETRIS'); game = 'tet'; content.innerHTML = '<div class="tetris" id="tet"></div><p class="info">Espacio o flecha abajo para bajar.</p>'; let board = Array(200).fill(0), pieces = [[[1, 1, 1, 1]], [[1, 1], [1, 1]], [[0, 1, 0], [1, 1, 1]]], p = pieces[Math.random() * pieces.length | 0], px = 4, py = 0; document.onkeydown = e => {if (e.key === 'ArrowLeft') px = Math.max(0, px - 1); if (e.key === 'ArrowRight') px = Math.min(10 - p[0].length, px + 1); if (e.key === 'ArrowDown' || e.key === ' ') py = Math.min(18, py + 1); drawTet()}; int = setInterval(() => {py++; if (py > 18) {py = 0; px = Math.random() * 7 | 0; p = pieces[Math.random() * pieces.length | 0]} drawTet()}, 600); function drawTet() {tet.innerHTML = ''; for (let i = 0; i < 200; i++) {let d = document.createElement('div'), r = i / 10 | 0, c = i % 10, f = board[i]; for (let a = 0; a < p.length; a++)for (let z = 0; z < p[a].length; z++)if (p[a][z] && r === py + a && c === px + z) f = 1; d.className = f ? 'f' : ''; tet.appendChild(d)} } drawTet()}
+        /* REACTION */
+        function reaction() {openGame('REACTION'); game = 'react'; content.innerHTML = '<div id="rb" class="react">ESPERA...</div><p id="ri" class="info">Haz clic cuando cambie.</p>'; let ready = 0, start = 0; int = setTimeout(() => {ready = 1; rb.classList.add('go'); rb.textContent = 'AHORA'; start = performance.now()}, 900 + Math.random() * 2500); rb.onclick = () => {if (!ready) {ri.textContent = 'Demasiado pronto.'; clearTimeout(int); return } let t = Math.round(performance.now() - start); rb.textContent = t + ' ms'; score.textContent = 'SCORE: ' + t; ri.textContent = 'Tiempo registrado.'; ready = 0}}
+        /* CLICKER */
+        function clicker() {openGame('CLICK SPEED'); game = 'click'; let n = 0, t = 10; content.innerHTML = '<div class="clicknum" id="cn">0</div><button id="cb" class="clickbig">CLICK</button><p id="ci2" class="info">10 segundos.</p>'; cb.onclick = () => {if (t > 0) {n++; cn.textContent = n} }; int = setInterval(() => {t--; ci2.textContent = 'Tiempo: ' + t + ' s'; if (t <= 0) {clearInterval(int); score.textContent = 'SCORE: ' + n} }, 1000)}
+        /* NUMBER CHALLENGE */
+        function numbers() {openGame('NUMBER CHALLENGE'); game = 'num'; let a = 10 + Math.random() * 80 | 0, b = 1 + Math.random() * 20 | 0, ans = a + b, t = 10; content.innerHTML = '<div style="font-size:45px;font-weight:900;margin:20px">' + a + ' + ' + b + ' = ?</div><input id="ni" type="number"><button class="btn" onclick="answer()">RESPONDER</button><p id="ninfo" class="info">Tiempo: 10 s</p>'; window.answer = () => {if (+ni.value === ans) {ninfo.textContent = 'Correcto.'; score.textContent = 'COMPLETADO'; clearInterval(int)} else ninfo.textContent = 'Incorrecto.'}; int = setInterval(() => {t--; ninfo.textContent = 'Tiempo: ' + t + ' s'; if (t <= 0) {clearInterval(int); ninfo.textContent = 'Tiempo agotado.'} }, 1000)}
+    </script>
+</body>
+
+</html>
