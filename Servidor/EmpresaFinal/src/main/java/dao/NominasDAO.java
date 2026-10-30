@@ -8,8 +8,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Clase encargada de gestionar las nóminas en la base de datos.
+ */
 public class NominasDAO {
 
+    /**
+     * Consulta el sueldo de un empleado usando su DNI.
+     *
+     * @param dni DNI del empleado.
+     * @return sueldo del empleado o -1 si no se encuentra.
+     * @throws SQLException si ocurre un error en la consulta.
+     */
     public static int obtenerSueldo(String dni) throws SQLException {
 
         String sql = "SELECT sueldo FROM Nominas WHERE dni = ?";
@@ -28,6 +38,12 @@ public class NominasDAO {
         return -1;
     }
 
+    /**
+     * Actualiza el sueldo de un empleado en la base de datos.
+     *
+     * @param empleado empleado cuyo sueldo se va a actualizar.
+     * @throws SQLException si ocurre un error al actualizar.
+     */
     public static void actualizarSueldo(Empleado empleado) throws SQLException {
 
         String sql = "UPDATE Nominas SET sueldo = ? WHERE dni = ?";
@@ -42,6 +58,12 @@ public class NominasDAO {
         }
     }
 
+    /**
+     * Crea una nómina para un empleado.
+     *
+     * @param empleado empleado para el que se crea la nómina.
+     * @throws SQLException si ocurre un error al insertar la nómina.
+     */
     public static void altaNomina(Empleado empleado) throws SQLException {
 
         String sql = "INSERT INTO Nominas (dni, sueldo) VALUES (?, ?)";

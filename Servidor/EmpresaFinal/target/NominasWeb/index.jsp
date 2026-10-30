@@ -39,6 +39,7 @@
 
         .opcion {
             display: block;
+            min-height: 180px;
             padding: 25px;
             background: white;
             border-radius: 10px;
@@ -68,6 +69,12 @@
             padding: 20px;
             color: #666;
         }
+
+        @media (max-width: 600px) {
+            main {
+                margin: 20px auto;
+            }
+        }
     </style>
 </head>
 
@@ -91,15 +98,21 @@
         </a>
 
         <a class="opcion"
-           href="${pageContext.request.contextPath}/consultar-sueldo">
-            <h2>Consultar sueldo</h2>
-            <p>Consultar la nómina de un empleado mediante su DNI.</p>
+           href="${pageContext.request.contextPath}/salario">
+            <h2>Consultar salario por DNI</h2>
+            <p>Consultar el salario de un empleado introduciendo su DNI.</p>
         </a>
 
         <a class="opcion"
            href="${pageContext.request.contextPath}/buscar-empleados">
             <h2>Buscar empleados</h2>
             <p>Localizar empleados utilizando sus datos.</p>
+        </a>
+
+        <a class="opcion"
+           href="${pageContext.request.contextPath}/alta-empleado">
+            <h2>Alta de empleados</h2>
+            <p>Registrar un nuevo empleado y calcular su nómina inicial.</p>
         </a>
 
     </div>
